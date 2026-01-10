@@ -1,3 +1,10 @@
+import styles from "./HomePage.module.scss";
+import PostList from "./postList/PostList";
+
 export default function HomePage() {
-  return <div></div>;
+  return (
+    <div className={styles.container}>
+      <PostList />
+    </div>
+  );
 }

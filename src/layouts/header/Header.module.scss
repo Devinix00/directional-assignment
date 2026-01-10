@@ -3,6 +3,7 @@
 
 .header {
   position: sticky;
+  height: $header-height;
   top: 0;
   z-index: $z-index-header;
   background: $color-white;

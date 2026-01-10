@@ -1,0 +1,8 @@
+@use "../../styles/variables" as *;
+
+.container {
+  flex: 1;
+  min-height: calc(100dvh - $header-height - $footer-height);
+  display: flex;
+  flex-direction: column;
+}

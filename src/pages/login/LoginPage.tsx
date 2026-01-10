@@ -2,6 +2,7 @@ import { Form, Input, Button, Card, Typography } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import type { FormProps } from "antd";
 import styles from "./LoginPage.module.scss";
+import { useLoginMutation } from "../../services/auth/mutations";
 
 const { Title } = Typography;
 
@@ -12,18 +13,13 @@ interface LoginFormValues {
 
 export default function LoginPage() {
   const [form] = Form.useForm();
+  const { mutate: login } = useLoginMutation();
 
   const handleSubmit: FormProps<LoginFormValues>["onFinish"] = ({
     email,
     password,
   }) => {
-    console.log("Login values:", email, password);
-  };
-
-  const handleValidationFailed: FormProps<LoginFormValues>["onFinishFailed"] = (
-    errorInfo
-  ) => {
-    console.log("Failed:", errorInfo);
+    login({ email, password });
   };
 
   return (
@@ -36,7 +32,6 @@ export default function LoginPage() {
           form={form}
           name="login"
           onFinish={handleSubmit}
-          onFinishFailed={handleValidationFailed}
           layout="vertical"
           size="large"
         >
@@ -67,7 +62,7 @@ export default function LoginPage() {
           </Form.Item>
 
           <Form.Item>
-            <Button disabled type="primary" htmlType="submit" block>
+            <Button type="primary" htmlType="submit" block>
               로그인
             </Button>
           </Form.Item>

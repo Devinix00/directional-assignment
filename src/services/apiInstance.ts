@@ -6,7 +6,7 @@ import axios, {
 } from "axios";
 
 const apiInstance: AxiosInstance = axios.create({
-  baseURL: "",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 apiInstance.interceptors.request.use(
@@ -28,3 +28,5 @@ apiInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export default apiInstance;

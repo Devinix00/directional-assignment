@@ -5,6 +5,7 @@ import PostListFilter from "./components/postListFilter/PostListFilter";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 import { useGetPostListQuery } from "../../services/post/queries";
 import type { GetPostListParams } from "../../services/post/types";
+import { COLUMN_OPTIONS, type ColumnKey } from "./constants/postFilter";
 
 export default function HomePage() {
   const [params, setParams] = useState<GetPostListParams>({
@@ -14,6 +15,9 @@ export default function HomePage() {
     category: null,
   });
   const [searchValue, setSearchValue] = useState("");
+  const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>(
+    COLUMN_OPTIONS.map((col) => col.key)
+  );
 
   const { data, isLoading, fetchNextPage, hasNextPage } =
     useGetPostListQuery(params);
@@ -55,12 +59,15 @@ export default function HomePage() {
         onSearch={handleSearch}
         params={params}
         onFilterChange={handleFilterChange}
+        visibleColumns={visibleColumns}
+        onColumnVisibilityChange={setVisibleColumns}
       />
       <PostList
         posts={allPosts}
         isLoading={isLoading}
         loadMoreRef={loadMoreRef}
         hasNextPage={hasNextPage}
+        visibleColumns={visibleColumns}
       />
     </div>
   );

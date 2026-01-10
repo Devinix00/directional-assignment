@@ -1,12 +1,15 @@
-import { Space, Select, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import styles from "./PostListFilter.module.scss";
+import { SearchOutlined, SettingOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Dropdown, Input, Select, Space } from "antd";
+import { useState } from "react";
 import type { GetPostListParams } from "../../../../services/post/types";
 import {
   CATEGORY_OPTIONS,
+  COLUMN_OPTIONS,
   ORDER_OPTIONS,
   SORT_OPTIONS,
+  type ColumnKey,
 } from "../../constants/postFilter";
+import styles from "./PostListFilter.module.scss";
 const { Search } = Input;
 const { Option } = Select;
 
@@ -19,6 +22,8 @@ interface PostListFilterProps {
     field: "category" | "sort" | "order",
     value: string | null
   ) => void;
+  visibleColumns: ColumnKey[];
+  onColumnVisibilityChange: (columns: ColumnKey[]) => void;
 }
 
 function PostListFilter({
@@ -27,7 +32,36 @@ function PostListFilter({
   onSearch,
   params,
   onFilterChange,
+  visibleColumns,
+  onColumnVisibilityChange,
 }: PostListFilterProps) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleColumnChange = (checkedValues: string[]) => {
+    onColumnVisibilityChange(checkedValues as ColumnKey[]);
+  };
+
+  const columnMenuItems = [
+    {
+      key: "columns",
+      label: (
+        <div onClick={(e) => e.stopPropagation()}>
+          <Checkbox.Group
+            value={visibleColumns}
+            onChange={handleColumnChange}
+            style={{ display: "flex", flexDirection: "column", gap: 8 }}
+          >
+            {COLUMN_OPTIONS.map((option) => (
+              <Checkbox key={option.key} value={option.key}>
+                {option.label}
+              </Checkbox>
+            ))}
+          </Checkbox.Group>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className={styles.container}>
       <Space size="middle" wrap className={styles.filter_space}>
@@ -80,6 +114,20 @@ function PostListFilter({
             </Option>
           ))}
         </Select>
+        <Dropdown
+          menu={{ items: columnMenuItems }}
+          trigger={["click"]}
+          placement="bottomRight"
+          open={dropdownOpen}
+          onOpenChange={setDropdownOpen}
+        >
+          <Button
+            icon={<SettingOutlined />}
+            className={styles.column_setting_button}
+          >
+            컬럼 설정
+          </Button>
+        </Dropdown>
       </Space>
     </div>
   );

@@ -1,16 +1,19 @@
 import { Space, Table, Tag } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import dayjs from "dayjs";
+import { useMemo } from "react";
 import type { Post } from "../../../../services/post/types";
 import styles from "./PostList.module.scss";
 import PostListEmpty from "./postListEmpty/PostListEmpty";
 import { CATEGORY_OPTIONS } from "../../constants/postFilter";
+import type { ColumnKey } from "../../constants/postFilter";
 
 interface PostListProps {
   posts: Post[];
   isLoading: boolean;
   loadMoreRef: React.RefObject<HTMLDivElement | null>;
   hasNextPage: boolean;
+  visibleColumns: ColumnKey[];
 }
 
 export default function PostList({
@@ -18,43 +21,53 @@ export default function PostList({
   isLoading,
   loadMoreRef,
   hasNextPage,
+  visibleColumns,
 }: PostListProps) {
-  const columns: ColumnsType<Post> = [
-    {
-      title: "제목",
-      dataIndex: "title",
-      key: "title",
-      ellipsis: true,
-    },
-    {
-      title: "카테고리",
-      dataIndex: "category",
-      key: "category",
-      width: 120,
-      render: (category: string) => {
-        const option = CATEGORY_OPTIONS.find((opt) => opt.value === category);
-        return <Tag color="blue">{option?.label || category}</Tag>;
+  const allColumns: ColumnsType<Post> = useMemo(
+    () => [
+      {
+        title: "제목",
+        dataIndex: "title",
+        key: "title",
+        ellipsis: true,
       },
-    },
-    {
-      title: "태그",
-      dataIndex: "tags",
-      key: "tags",
-      render: (tags: string[]) => (
-        <Space wrap>
-          {tags.map((tag) => (
-            <Tag key={tag}>{tag}</Tag>
-          ))}
-        </Space>
-      ),
-    },
-    {
-      title: "작성일",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
-    },
-  ];
+      {
+        title: "카테고리",
+        dataIndex: "category",
+        key: "category",
+        width: 120,
+        render: (category: string) => {
+          const option = CATEGORY_OPTIONS.find((opt) => opt.value === category);
+          return <Tag color="blue">{option?.label || category}</Tag>;
+        },
+      },
+      {
+        title: "태그",
+        dataIndex: "tags",
+        key: "tags",
+        render: (tags: string[]) => (
+          <Space wrap>
+            {tags.map((tag) => (
+              <Tag key={tag}>{tag}</Tag>
+            ))}
+          </Space>
+        ),
+      },
+      {
+        title: "작성일",
+        dataIndex: "createdAt",
+        key: "createdAt",
+        render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
+      },
+    ],
+    []
+  );
+
+  const columns = useMemo(() => {
+    return allColumns.filter((col) =>
+      visibleColumns.includes(col.key as ColumnKey)
+    );
+  }, [allColumns, visibleColumns]);
 
   const tableProps: TableProps<Post> = {
     columns,

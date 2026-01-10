@@ -142,7 +142,6 @@ export default function PostList({
         };
       });
 
-    // 삭제 컬럼은 항상 마지막에 추가
     const actionsColumn = allColumns.find((col) => col.key === "actions");
     return actionsColumn ? [...dataColumns, actionsColumn] : dataColumns;
   }, [allColumns, visibleColumns, columnWidths, onColumnWidthChange]);

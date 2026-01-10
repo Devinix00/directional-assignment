@@ -63,7 +63,6 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
     value: string | "NOTICE" | "QNA" | "FREE" | string[]
   ) => {
     if (field === "tags" && Array.isArray(value)) {
-      // 중복 제거: 순서를 유지하면서 중복 제거
       const uniqueTags: string[] = [];
       const seen = new Set<string>();
       for (const tag of value) {

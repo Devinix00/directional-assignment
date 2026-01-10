@@ -13,7 +13,7 @@ export default function Header() {
       </Link>
       <nav className={styles.nav}>
         <Link to={PATH.HOME}>홈</Link>
-        <Link to={PATH.HOME}>로그인</Link>
+        <Link to={PATH.LOGIN}>로그인</Link>
       </nav>
     </AntdHeader>
   );

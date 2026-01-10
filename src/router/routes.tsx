@@ -3,8 +3,9 @@ import HomePage from "../pages/home/HomePage";
 import PATH from "./path";
 import LoginPage from "../pages/login/LoginPage";
 import PostCreationPage from "../pages/post/creation/PostCreationPage";
+import PostDetailPage from "../pages/post/detail/PostDetailPage";
 
-export const routes = [
+const routes = [
   {
     element: <Layout />,
     children: [
@@ -13,8 +14,12 @@ export const routes = [
         element: <HomePage />,
       },
       {
-        path: PATH.POST_CREATION,
+        path: PATH.POST.CREATION,
         element: <PostCreationPage />,
+      },
+      {
+        path: `${PATH.POST.ROOT}/:id`,
+        element: <PostDetailPage />,
       },
     ],
   },
@@ -23,3 +28,5 @@ export const routes = [
     element: <LoginPage />,
   },
 ];
+
+export default routes;

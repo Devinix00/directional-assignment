@@ -68,7 +68,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             홈
           </Link>
           <Link
-            to={PATH.POST_CREATION}
+            to={PATH.POST.CREATION}
             className={styles.nav_item}
             onClick={onClose}
           >

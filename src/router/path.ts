@@ -1,7 +1,11 @@
 const PATH = {
   HOME: "/",
   LOGIN: "/login",
-  POST_CREATION: "/post/creation",
+  POST: {
+    ROOT: "/post",
+    CREATION: "/post/creation",
+    DETAIL: "/post/:id",
+  },
 };
 
 export default PATH;

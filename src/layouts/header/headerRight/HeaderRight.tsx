@@ -14,7 +14,7 @@ export default function HeaderRight() {
       <Link to={PATH.HOME} className={styles.nav_link}>
         홈
       </Link>
-      <Link to={PATH.POST_CREATION} className={styles.nav_link}>
+      <Link to={PATH.POST.CREATION} className={styles.nav_link}>
         게시글 작성
       </Link>
       {isAuthenticated ? (

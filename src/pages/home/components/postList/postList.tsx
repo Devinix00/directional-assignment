@@ -2,12 +2,14 @@ import { Space, Table, Tag } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import dayjs from "dayjs";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Post } from "../../../../services/post/types";
 import styles from "./PostList.module.scss";
 import PostListEmpty from "./postListEmpty/PostListEmpty";
 import { CATEGORY_OPTIONS } from "../../constants/postFilter";
 import type { ColumnKey } from "../../constants/postFilter";
 import ResizableTitle from "./ResizableTitle";
+import PATH from "../../../../router/path";
 
 interface PostListProps {
   posts: Post[];
@@ -28,6 +30,7 @@ export default function PostList({
   columnWidths,
   onColumnWidthChange,
 }: PostListProps) {
+  const navigate = useNavigate();
   const allColumns: ColumnsType<Post> = useMemo(
     () => [
       {
@@ -102,6 +105,12 @@ export default function PostList({
     loading: isLoading && posts.length === 0,
     pagination: false,
     size: "middle",
+    onRow: (record) => ({
+      onClick: () => {
+        navigate(`${PATH.POST.ROOT}/${record.id}`);
+      },
+      className: styles.table_row,
+    }),
   };
 
   return (

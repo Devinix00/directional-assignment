@@ -25,6 +25,10 @@ const postApis = {
     const response = await apiInstance.post("/posts", data);
     return response.data;
   },
+  getPost: async (id: string): Promise<Post> => {
+    const response = await apiInstance.get(`/posts/${id}`);
+    return response.data;
+  },
 };
 
 export default postApis;

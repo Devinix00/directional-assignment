@@ -21,4 +21,14 @@
   &:hover {
     background-color: rgba(0, 0, 0, 0.02);
   }
+
+  .title_cell {
+    word-break: break-word;
+    white-space: normal;
+  }
+
+  .tags_container {
+    word-break: break-word;
+    white-space: normal;
+  }
 }

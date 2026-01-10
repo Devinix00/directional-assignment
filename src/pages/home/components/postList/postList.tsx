@@ -64,8 +64,10 @@ export default function PostList({
         title: "제목",
         dataIndex: "title",
         key: "title",
-        ellipsis: true,
         width: columnWidths.title,
+        render: (title: string) => (
+          <div className={styles.title_cell}>{title}</div>
+        ),
       },
       {
         title: "카테고리",
@@ -83,11 +85,13 @@ export default function PostList({
         key: "tags",
         width: columnWidths.tags,
         render: (tags: string[]) => (
-          <Space wrap>
-            {tags.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
-          </Space>
+          <div className={styles.tags_container}>
+            <Space wrap size={[4, 4]}>
+              {tags.map((tag) => (
+                <Tag key={tag}>{tag}</Tag>
+              ))}
+            </Space>
+          </div>
         ),
       },
       {

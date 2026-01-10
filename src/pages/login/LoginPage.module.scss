@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@use "../../styles/variables" as *;
 
 .container {
   display: flex;
@@ -9,7 +9,7 @@
   .card {
     width: calc(100% - 32px);
     max-width: 500px;
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow-md;
   }
 
   .title {

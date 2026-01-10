@@ -1,32 +1,47 @@
 @use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: $z-index-header;
   background: $color-white;
   border-bottom: 1px solid $color-border;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 
-  .logo {
+  .inner {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    text-decoration: none;
-    color: $color-text;
-  }
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 16px;
 
-  .nav {
-    display: flex;
-    gap: 24px;
-    align-items: center;
+    @include laptop {
+      width: 1024px;
+    }
 
-    .logout_button {
-      padding: 0;
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      color: $color-text;
+    }
+
+    .nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+
+      .logout_button {
+        padding: 0;
+      }
     }
   }
 }

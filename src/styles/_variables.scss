@@ -20,5 +20,11 @@ $shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
 $shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
 $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 
+// breakpoints
+$breakpoint-mobile: 768px; // 모바일 (0 ~ 767px)
+$breakpoint-tablet: 768px; // 태블릿 이상
+$breakpoint-laptop: 1024px; // 랩탑 이상
+$breakpoint-desktop: 1440px; // 데스크탑 이상
+
 // z-index
 $z-index-header: 100;

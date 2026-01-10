@@ -12,23 +12,25 @@ export default function Header() {
 
   return (
     <AntdHeader className={styles.header}>
-      <Link to={PATH.HOME} className={styles.logo}>
-        <span>Logo</span>
-      </Link>
-      <nav className={styles.nav}>
-        <Link to={PATH.HOME}>홈</Link>
-        {isAuthenticated ? (
-          <Button
-            onClick={() => logout()}
-            type="link"
-            className={styles.logout_button}
-          >
-            로그아웃
-          </Button>
-        ) : (
-          <Link to={PATH.LOGIN}>로그인</Link>
-        )}
-      </nav>
+      <div className={styles.inner}>
+        <Link to={PATH.HOME} className={styles.logo}>
+          <span>Logo</span>
+        </Link>
+        <nav className={styles.nav}>
+          <Link to={PATH.HOME}>홈</Link>
+          {isAuthenticated ? (
+            <Button
+              onClick={() => logout()}
+              type="link"
+              className={styles.logout_button}
+            >
+              로그아웃
+            </Button>
+          ) : (
+            <Link to={PATH.LOGIN}>로그인</Link>
+          )}
+        </nav>
+      </div>
     </AntdHeader>
   );
 }

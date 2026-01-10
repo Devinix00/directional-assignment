@@ -1,0 +1,29 @@
+@use "./variables" as *;
+
+// 모바일: 0px ~ 767px
+@mixin mobile {
+  @media (max-width: calc(#{$breakpoint-mobile} - 1px)) {
+    @content;
+  }
+}
+
+// 태블릿: 768px 이상
+@mixin tablet {
+  @media (min-width: $breakpoint-tablet) {
+    @content;
+  }
+}
+
+// 랩탑: 1024px 이상
+@mixin laptop {
+  @media (min-width: $breakpoint-laptop) {
+    @content;
+  }
+}
+
+// 데스크탑: 1440px 이상
+@mixin desktop {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}

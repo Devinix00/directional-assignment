@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import PATH from "../../router/path";
 import styles from "./Header.module.scss";
 
-export default function Header() {
-  const { Header: AntdHeader } = Layout;
+const { Header: AntdHeader } = Layout;
 
+export default function Header() {
   return (
     <AntdHeader className={styles.header}>
       <Link to={PATH.HOME} className={styles.logo}>

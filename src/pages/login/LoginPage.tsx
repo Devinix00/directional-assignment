@@ -3,6 +3,9 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import type { FormProps } from "antd";
 import styles from "./LoginPage.module.scss";
 import { useLoginMutation } from "../../services/auth/mutations";
+import useAuthStore from "../../stores/useAuthStore";
+import { useNavigate } from "react-router-dom";
+import PATH from "../../router/path";
 
 const { Title } = Typography;
 
@@ -13,13 +16,25 @@ interface LoginFormValues {
 
 export default function LoginPage() {
   const [form] = Form.useForm();
-  const { mutate: login } = useLoginMutation();
+  const { mutate: login, isPending } = useLoginMutation();
+  const setToken = useAuthStore((state) => state.setToken);
+  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
+  const navigate = useNavigate();
 
   const handleSubmit: FormProps<LoginFormValues>["onFinish"] = ({
     email,
     password,
   }) => {
-    login({ email, password });
+    login(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          setToken(data.token);
+          setIsAuthenticated(true);
+          navigate(PATH.HOME);
+        },
+      }
+    );
   };
 
   return (
@@ -62,8 +77,8 @@ export default function LoginPage() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              로그인
+            <Button disabled={isPending} type="primary" htmlType="submit" block>
+              {isPending ? "로그인 중..." : "로그인"}
             </Button>
           </Form.Item>
         </Form>

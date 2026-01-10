@@ -5,8 +5,5 @@ export function useLoginMutation() {
   return useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       authApis.login({ email, password }),
-    onSuccess: (data) => {
-      console.log(data);
-    },
   });
 }

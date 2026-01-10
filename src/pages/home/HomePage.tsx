@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "./HomePage.module.scss";
 import PostList from "./components/postList/postList";
 import PostListFilter from "./components/postListFilter/PostListFilter";
@@ -15,54 +15,37 @@ export default function HomePage() {
   });
   const [searchValue, setSearchValue] = useState("");
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isLoading, fetchNextPage, hasNextPage } =
     useGetPostListQuery(params);
 
   const allPosts = useMemo(() => {
     return data?.pages.flatMap((page) => page.items) ?? [];
   }, [data]);
 
-  const handleFetchNextPage = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
   const { ref: loadMoreRef } = useInfiniteScroll<HTMLDivElement>({
-    fetchNextPage: handleFetchNextPage,
+    fetchNextPage: fetchNextPage,
     hasNextPage: !!hasNextPage,
   });
 
-  const resetAndUpdateParams = useCallback(
-    (updater: (prev: GetPostListParams) => GetPostListParams) => {
-      setParams((prev) => ({
-        ...updater(prev),
-        nextCursor: undefined,
-      }));
-    },
-    []
-  );
+  const handleFilterChange = (
+    field: "category" | "sort" | "order",
+    value: string | null
+  ) => {
+    setParams((prev) => ({
+      ...prev,
+      [field]: value as GetPostListParams[typeof field],
+      nextCursor: undefined,
+    }));
+  };
 
-  const handleFilterChange = useCallback(
-    (field: "category" | "sort" | "order", value: string | null) => {
-      resetAndUpdateParams((prev) => ({
-        ...prev,
-        [field]: value as GetPostListParams[typeof field],
-      }));
-    },
-    [resetAndUpdateParams]
-  );
-
-  const handleSearch = useCallback(
-    (value: string) => {
-      setSearchValue(value);
-      resetAndUpdateParams((prev) => ({
-        ...prev,
-        search: value || undefined,
-      }));
-    },
-    [resetAndUpdateParams]
-  );
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+    setParams((prev) => ({
+      ...prev,
+      search: value || undefined,
+      nextCursor: undefined,
+    }));
+  };
 
   return (
     <div className={styles.container}>

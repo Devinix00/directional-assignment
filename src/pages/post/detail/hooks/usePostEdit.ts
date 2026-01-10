@@ -22,7 +22,7 @@ interface UsePostEditParams {
   post: Post;
   updatePost: (
     changes: UpdatePostRequest,
-    options?: { onSuccess?: () => void }
+    options?: { onSuccess?: () => void; onError?: () => void }
   ) => void;
 }
 
@@ -68,8 +68,6 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
   const handleSaveField = (field: EditingField) => {
     if (!field) return;
 
-    const changes: UpdatePostRequest = {};
-
     if (field === "title") {
       const newTitle = editedValues.title;
       if (newTitle === undefined || newTitle === post.title) {
@@ -79,14 +77,21 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
       }
       if (!validateTitleLength(newTitle)) return;
       if (!validateForbiddenWord(newTitle, "제목")) return;
-      changes.title = newTitle;
-      updatePost(changes, {
-        onSuccess: () => {
-          message.success("수정되었습니다.");
-          setEditingField(null);
-          setEditedValues({});
-        },
-      });
+      setEditingField(null);
+      setEditedValues({});
+
+      updatePost(
+        { title: newTitle },
+        {
+          onSuccess: () => {
+            message.success("수정되었습니다.");
+          },
+          onError: () => {
+            setEditingField(field);
+            setEditedValues({ [field]: newTitle });
+          },
+        }
+      );
       return;
     }
 
@@ -99,14 +104,20 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
       }
       if (!validateBodyLength(newBody)) return;
       if (!validateForbiddenWord(newBody, "내용")) return;
-      changes.body = newBody;
-      updatePost(changes, {
-        onSuccess: () => {
-          message.success("수정되었습니다.");
-          setEditingField(null);
-          setEditedValues({});
-        },
-      });
+      setEditingField(null);
+      setEditedValues({});
+      updatePost(
+        { body: newBody },
+        {
+          onSuccess: () => {
+            message.success("수정되었습니다.");
+          },
+          onError: () => {
+            setEditingField(field);
+            setEditedValues({ [field]: newBody });
+          },
+        }
+      );
       return;
     }
 
@@ -117,14 +128,21 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
         setEditingField(null);
         return;
       }
-      changes.category = newCategory;
-      updatePost(changes, {
-        onSuccess: () => {
-          message.success("수정되었습니다.");
-          setEditingField(null);
-          setEditedValues({});
-        },
-      });
+      setEditingField(null);
+      setEditedValues({});
+
+      updatePost(
+        { category: newCategory },
+        {
+          onSuccess: () => {
+            message.success("수정되었습니다.");
+          },
+          onError: () => {
+            setEditingField(field);
+            setEditedValues({ [field]: newCategory });
+          },
+        }
+      );
       return;
     }
 
@@ -139,14 +157,21 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
         return;
       }
       if (!validateTagsForbiddenWord(newTags)) return;
-      changes.tags = newTags;
-      updatePost(changes, {
-        onSuccess: () => {
-          message.success("수정되었습니다.");
-          setEditingField(null);
-          setEditedValues({});
-        },
-      });
+      setEditingField(null);
+      setEditedValues({});
+
+      updatePost(
+        { tags: newTags },
+        {
+          onSuccess: () => {
+            message.success("수정되었습니다.");
+          },
+          onError: () => {
+            setEditingField(field);
+            setEditedValues({ [field]: newTags });
+          },
+        }
+      );
       return;
     }
   };

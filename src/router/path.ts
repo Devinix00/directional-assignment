@@ -6,6 +6,7 @@ const PATH = {
     CREATION: "/post/creation",
     DETAIL: "/post/:id",
   },
+  NOT_FOUND: "*",
 };
 
 export default PATH;

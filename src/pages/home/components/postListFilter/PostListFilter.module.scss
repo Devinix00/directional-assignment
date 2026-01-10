@@ -1,0 +1,32 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.container {
+  margin-bottom: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $color-border;
+  position: sticky;
+  top: $header-height;
+  background-color: $color-bg-layout;
+  z-index: 10;
+
+  .filter_space {
+    width: 100%;
+  }
+
+  .search_input {
+    width: 100%;
+
+    @include tablet {
+      width: 300px;
+    }
+  }
+
+  .category_select,
+  .sort_select,
+  .order_select {
+    width: 100%;
+    min-width: 126px;
+  }
+}

@@ -20,3 +20,15 @@ export interface CreatePostRequest {
   category: "NOTICE" | "QNA" | "FREE";
   tags: string[];
 }
+
+export interface GetPostListParams {
+  limit?: number;
+  prevCursor?: string;
+  nextCursor?: string;
+  sort?: "createdAt" | "title";
+  order?: "asc" | "desc";
+  category?: "NOTICE" | "QNA" | "FREE" | null;
+  from?: string;
+  to?: string;
+  search?: string;
+}

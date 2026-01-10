@@ -1,7 +1,9 @@
+@use "../styles/variables" as *;
 @use "../styles/mixins" as *;
 
 .layout {
   min-height: 100dvh;
+  background-color: $color-bg-layout;
 
   .content {
     flex: 1;

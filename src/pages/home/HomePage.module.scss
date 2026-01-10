@@ -5,4 +5,5 @@
   min-height: calc(100dvh - $header-height - $footer-height);
   display: flex;
   flex-direction: column;
+  padding-bottom: 16px;
 }

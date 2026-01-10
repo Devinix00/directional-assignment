@@ -1,10 +1,18 @@
-import { Typography } from "antd";
+import { Typography, Button } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
 import styles from "./PostListEmpty.module.scss";
+import { useNavigate } from "react-router-dom";
+import PATH from "../../../../../router/path";
 
 const { Title, Text } = Typography;
 
 export default function PostListEmpty() {
+  const navigate = useNavigate();
+
+  const handleClickCreatePost = () => {
+    navigate(PATH.POST_CREATION);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.empty_icon}>
@@ -14,6 +22,10 @@ export default function PostListEmpty() {
       <Text className={styles.empty_description}>
         첫 번째 게시글을 작성해보세요.
       </Text>
+
+      <Button type="primary" onClick={handleClickCreatePost}>
+        게시글 작성
+      </Button>
     </div>
   );
 }

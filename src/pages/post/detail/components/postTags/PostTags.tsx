@@ -32,6 +32,7 @@ export default function PostTags({
             value={editedTags !== undefined ? editedTags : tags}
             onChange={onTagsChange}
             placeholder="태그를 입력하세요 (엔터로 추가)"
+            autoFocus
           />
           <Space align="center">
             <Button

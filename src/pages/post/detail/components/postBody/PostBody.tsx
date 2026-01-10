@@ -38,6 +38,7 @@ export default function PostBody({
           placeholder="내용을 입력하세요"
           maxLength={POST_LIMITS.BODY_MAX_LENGTH}
           showCount
+          autoFocus
         />
         <div className={styles.body_actions}>
           <Space align="center">

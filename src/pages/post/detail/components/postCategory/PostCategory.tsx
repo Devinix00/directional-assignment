@@ -44,6 +44,7 @@ export default function PostCategory({
           }
           onChange={onCategoryChange}
           style={{ width: 120 }}
+          autoFocus
         >
           {POST_CATEGORY_OPTIONS.map((option) => (
             <Option key={option.value} value={option.value}>

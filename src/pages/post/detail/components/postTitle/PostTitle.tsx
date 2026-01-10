@@ -36,6 +36,7 @@ export default function PostTitle({
           placeholder="제목을 입력하세요"
           maxLength={POST_LIMITS.TITLE_MAX_LENGTH}
           showCount
+          autoFocus
         />
         <Space align="center">
           <Button

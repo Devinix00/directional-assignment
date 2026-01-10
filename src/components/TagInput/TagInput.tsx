@@ -10,6 +10,7 @@ interface TagInputProps {
   onChange?: (tags: string[]) => void;
   placeholder?: string;
   disabled?: boolean;
+  autoFocus?: boolean;
 }
 
 //  커스텀 태그 입력 컴포넌트
@@ -22,6 +23,7 @@ export default function TagInput({
   onChange,
   placeholder = "태그를 입력하세요 (엔터로 추가)",
   disabled = false,
+  autoFocus = false,
 }: TagInputProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -75,6 +77,7 @@ export default function TagInput({
           disabled={disabled}
           className={styles.input}
           maxLength={POST_LIMITS.TAG_MAX_LENGTH}
+          autoFocus={autoFocus}
         />
       </div>
     </div>

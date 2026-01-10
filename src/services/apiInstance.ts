@@ -6,6 +6,7 @@ import axios, {
 } from "axios";
 import { message } from "antd";
 import useAuthStore from "../stores/useAuthStore";
+import PATH from "../router/path";
 
 const apiInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -35,6 +36,11 @@ apiInstance.interceptors.response.use(
 
     if (errorMessage) {
       message.error(errorMessage);
+    }
+
+    if (error.response?.status === 401) {
+      useAuthStore.getState().logout();
+      window.location.replace(PATH.LOGIN);
     }
 
     return Promise.reject(error);

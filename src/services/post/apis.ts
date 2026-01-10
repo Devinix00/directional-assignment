@@ -11,14 +11,7 @@ const postApis = {
   getPostList: async (
     params?: GetPostListParams
   ): Promise<PostListResponse> => {
-    const cleanedParams = params
-      ? Object.fromEntries(
-          Object.entries(params).filter(
-            ([, value]) => value !== undefined && value !== null
-          )
-        )
-      : undefined;
-    const response = await apiInstance.get("/posts", { params: cleanedParams });
+    const response = await apiInstance.get("/posts", { params });
     return response.data;
   },
   createPost: async (data: CreatePostRequest): Promise<Post> => {

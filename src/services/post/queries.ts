@@ -1,11 +1,16 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import postApis from "./apis";
-import postQueryKeys from "./queryKeys";
 import type { GetPostListParams, PostListResponse } from "./types";
 
-export function useGetPostListQuery(params?: GetPostListParams) {
+export function useGetPostListQuery({
+  queryKey,
+  params,
+}: {
+  queryKey: readonly unknown[];
+  params?: GetPostListParams;
+}) {
   return useInfiniteQuery<PostListResponse>({
-    queryKey: postQueryKeys.postList(params),
+    queryKey,
     queryFn: ({ pageParam }) =>
       postApis.getPostList({
         ...params,
@@ -16,9 +21,15 @@ export function useGetPostListQuery(params?: GetPostListParams) {
   });
 }
 
-export function useGetPostQuery(id: string) {
+export function useGetPostQuery({
+  queryKey,
+  id,
+}: {
+  queryKey: readonly unknown[];
+  id: string;
+}) {
   return useQuery({
-    queryKey: postQueryKeys.postDetail(id),
+    queryKey,
     queryFn: () => postApis.getPost(id),
     enabled: !!id,
   });

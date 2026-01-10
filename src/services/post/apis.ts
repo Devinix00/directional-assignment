@@ -10,11 +10,10 @@ const postApis = {
   getPostList: async (
     params?: GetPostListParams
   ): Promise<PostListResponse> => {
-    // undefined와 null 값 제거 (category가 null일 때는 제거)
     const cleanedParams = params
       ? Object.fromEntries(
           Object.entries(params).filter(
-            ([_, value]) => value !== undefined && value !== null
+            ([, value]) => value !== undefined && value !== null
           )
         )
       : undefined;
@@ -28,6 +27,9 @@ const postApis = {
   getPost: async (id: string): Promise<Post> => {
     const response = await apiInstance.get(`/posts/${id}`);
     return response.data;
+  },
+  deletePost: async (id: string): Promise<void> => {
+    await apiInstance.delete(`/posts/${id}`);
   },
 };
 

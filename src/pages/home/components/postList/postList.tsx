@@ -1,7 +1,8 @@
-import { Space, Table, Tag } from "antd";
+import { Space, Table, Tag, Button, Modal } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import dayjs from "dayjs";
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Post } from "../../../../services/post/types";
 import styles from "./PostList.module.scss";
@@ -10,6 +11,7 @@ import { CATEGORY_OPTIONS } from "../../constants/postFilter";
 import type { ColumnKey } from "../../constants/postFilter";
 import ResizableTitle from "./ResizableTitle";
 import PATH from "../../../../router/path";
+import { useDeletePostMutation } from "../../../../services/post/mutations";
 
 interface PostListProps {
   posts: Post[];
@@ -19,6 +21,7 @@ interface PostListProps {
   visibleColumns: ColumnKey[];
   columnWidths: Partial<Record<ColumnKey, number>>;
   onColumnWidthChange: (key: ColumnKey, width: number) => void;
+  postListQueryKey: readonly unknown[];
 }
 
 export default function PostList({
@@ -29,8 +32,29 @@ export default function PostList({
   visibleColumns,
   columnWidths,
   onColumnWidthChange,
+  postListQueryKey,
 }: PostListProps) {
   const navigate = useNavigate();
+  const { mutate: deletePost, isPending: isDeleting } =
+    useDeletePostMutation(postListQueryKey);
+
+  const handleDelete = useCallback(
+    (e: React.MouseEvent, id: string) => {
+      e.stopPropagation();
+      Modal.confirm({
+        title: "게시글 삭제",
+        content: "정말 이 게시글을 삭제하시겠습니까?",
+        okText: "삭제",
+        okType: "danger",
+        cancelText: "취소",
+        onOk: () => {
+          deletePost(id);
+        },
+      });
+    },
+    [deletePost]
+  );
+
   const allColumns: ColumnsType<Post> = useMemo(
     () => [
       {
@@ -70,13 +94,31 @@ export default function PostList({
         width: columnWidths.createdAt,
         render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
       },
+      {
+        title: "삭제",
+        key: "actions",
+        width: 80,
+        fixed: "right" as const,
+        render: (_: unknown, record: Post) => (
+          <Button
+            type="text"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={(e) => handleDelete(e, record.id)}
+            loading={isDeleting}
+          />
+        ),
+      },
     ],
-    [columnWidths]
+    [columnWidths, isDeleting, handleDelete]
   );
 
   const columns = useMemo(() => {
-    return allColumns
-      .filter((col) => visibleColumns.includes(col.key as ColumnKey))
+    const dataColumns = allColumns
+      .filter(
+        (col) =>
+          col.key !== "actions" && visibleColumns.includes(col.key as ColumnKey)
+      )
       .map((col) => {
         const columnKey = col.key as ColumnKey;
         const width = columnWidths[columnKey];
@@ -96,6 +138,10 @@ export default function PostList({
           ),
         };
       });
+
+    // 삭제 컬럼은 항상 마지막에 추가
+    const actionsColumn = allColumns.find((col) => col.key === "actions");
+    return actionsColumn ? [...dataColumns, actionsColumn] : dataColumns;
   }, [allColumns, visibleColumns, columnWidths, onColumnWidthChange]);
 
   const tableProps: TableProps<Post> = {

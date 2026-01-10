@@ -6,6 +6,7 @@ import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 import { useGetPostListQuery } from "../../services/post/queries";
 import { usePostListFilter } from "./hooks/usePostListFilter";
 import { usePostListColumnResize } from "./hooks/usePostListColumnResize";
+import postQueryKeys from "../../services/post/queryKeys";
 
 export default function HomePage() {
   const {
@@ -23,8 +24,12 @@ export default function HomePage() {
     handleColumnWidthChange,
   } = usePostListColumnResize();
 
-  const { data, isLoading, fetchNextPage, hasNextPage } =
-    useGetPostListQuery(params);
+  const postListQueryKey = postQueryKeys.postList(params);
+
+  const { data, isLoading, fetchNextPage, hasNextPage } = useGetPostListQuery({
+    queryKey: postListQueryKey,
+    params,
+  });
 
   const allPosts = useMemo(() => {
     return data?.pages.flatMap((page) => page.items) ?? [];
@@ -54,6 +59,7 @@ export default function HomePage() {
         visibleColumns={visibleColumns}
         columnWidths={columnWidths}
         onColumnWidthChange={handleColumnWidthChange}
+        postListQueryKey={postListQueryKey}
       />
     </div>
   );

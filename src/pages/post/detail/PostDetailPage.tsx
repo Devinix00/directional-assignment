@@ -6,13 +6,21 @@ import { useGetPostQuery } from "../../../services/post/queries";
 import { CATEGORY_OPTIONS } from "../../home/constants/postFilter";
 import PostDetailError from "./postDetailError/PostDetailError";
 import styles from "./PostDetailPage.module.scss";
+import postQueryKeys from "../../../services/post/queryKeys";
 
 const { Title, Paragraph } = Typography;
 
 export default function PostDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: post, isError, isLoading } = useGetPostQuery(id || "");
+  const {
+    data: post,
+    isError,
+    isLoading,
+  } = useGetPostQuery({
+    queryKey: postQueryKeys.postDetail(id || ""),
+    id: id || "",
+  });
 
   if (isLoading) return;
 

@@ -1,6 +1,7 @@
 import { EditOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, Space, Typography, Input } from "antd";
 import styles from "./PostBody.module.scss";
+import { POST_LIMITS } from "../../../../../constants/post";
 
 const { Paragraph } = Typography;
 const { TextArea } = Input;
@@ -35,6 +36,8 @@ export default function PostBody({
           rows={10}
           className={styles.body_input}
           placeholder="내용을 입력하세요"
+          maxLength={POST_LIMITS.BODY_MAX_LENGTH}
+          showCount
         />
         <div className={styles.body_actions}>
           <Space align="center">

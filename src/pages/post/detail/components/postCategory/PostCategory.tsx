@@ -1,7 +1,7 @@
 import { EditOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, Space, Tag, Select } from "antd";
 import dayjs from "dayjs";
-import { CATEGORY_OPTIONS } from "../../../../../constants/postCategory";
+import { CATEGORY_OPTIONS } from "../../../../../constants/post";
 import styles from "./PostCategory.module.scss";
 
 const { Option } = Select;

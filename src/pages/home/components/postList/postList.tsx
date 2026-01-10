@@ -8,7 +8,7 @@ import type { Post } from "../../../../services/post/types";
 import styles from "./PostList.module.scss";
 import PostListEmpty from "./postListEmpty/PostListEmpty";
 import PostListLoginRequired from "./postListLoginRequired/PostListLoginRequired";
-import { CATEGORY_OPTIONS } from "../../../../constants/postCategory";
+import { CATEGORY_OPTIONS } from "../../../../constants/post";
 import type { ColumnKey } from "../../constants/postFilter";
 import ResizableTitle from "./ResizableTitle";
 import PATH from "../../../../router/path";

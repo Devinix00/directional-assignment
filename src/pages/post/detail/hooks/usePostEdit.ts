@@ -4,7 +4,9 @@ import type { Post } from "../../../../services/post/types";
 import type { UpdatePostRequest } from "../../../../services/post/types";
 import {
   validateForbiddenWord,
-  validateTags,
+  validateTagsForbiddenWord,
+  validateTitleLength,
+  validateBodyLength,
 } from "../../../../utils/postValidation";
 
 type EditingField = "title" | "body" | "category" | "tags" | null;
@@ -60,7 +62,20 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
     field: "title" | "body" | "category" | "tags",
     value: string | "NOTICE" | "QNA" | "FREE" | string[]
   ) => {
-    setEditedValues({ ...editedValues, [field]: value });
+    if (field === "tags" && Array.isArray(value)) {
+      // 중복 제거: 순서를 유지하면서 중복 제거
+      const uniqueTags: string[] = [];
+      const seen = new Set<string>();
+      for (const tag of value) {
+        if (!seen.has(tag)) {
+          seen.add(tag);
+          uniqueTags.push(tag);
+        }
+      }
+      setEditedValues({ ...editedValues, [field]: uniqueTags });
+    } else {
+      setEditedValues({ ...editedValues, [field]: value });
+    }
   };
 
   const handleSaveField = (field: EditingField) => {
@@ -75,7 +90,8 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
         setEditingField(null);
         return;
       }
-      if (validateForbiddenWord(newTitle, "제목")) return;
+      if (!validateTitleLength(newTitle)) return;
+      if (!validateForbiddenWord(newTitle, "제목")) return;
       changes.title = newTitle;
       updatePost(changes, {
         onSuccess: () => {
@@ -94,7 +110,8 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
         setEditingField(null);
         return;
       }
-      if (validateForbiddenWord(newBody, "내용")) return;
+      if (!validateBodyLength(newBody)) return;
+      if (!validateForbiddenWord(newBody, "내용")) return;
       changes.body = newBody;
       updatePost(changes, {
         onSuccess: () => {
@@ -134,7 +151,7 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
         setEditingField(null);
         return;
       }
-      if (validateTags(newTags)) return;
+      if (!validateTagsForbiddenWord(newTags)) return;
       changes.tags = newTags;
       updatePost(changes, {
         onSuccess: () => {

@@ -6,9 +6,12 @@ import { useCreatePostMutation } from "../../../services/post/mutations";
 import type { CreatePostRequest } from "../../../services/post/types";
 import {
   validateForbiddenWord,
-  validateTags,
+  validateTagsForbiddenWord,
+  validateTitleLength,
+  validateBodyLength,
 } from "../../../utils/postValidation";
-import { CATEGORY_OPTIONS } from "../../../constants/postCategory";
+import { CATEGORY_OPTIONS, POST_LIMITS } from "../../../constants/post";
+import TagInput from "../../../components/TagInput/TagInput";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -25,9 +28,11 @@ export default function PostCreationPage() {
   const handleSubmit: FormProps<CreatePostRequest>["onFinish"] = (
     data: CreatePostRequest
   ) => {
-    if (validateForbiddenWord(data.title, "제목")) return;
-    if (validateForbiddenWord(data.body, "내용")) return;
-    if (validateTags(data.tags)) return;
+    if (!validateTitleLength(data.title)) return;
+    if (!validateBodyLength(data.body)) return;
+    if (!validateForbiddenWord(data.title, "제목")) return;
+    if (!validateForbiddenWord(data.body, "내용")) return;
+    if (!validateTagsForbiddenWord(data.tags)) return;
 
     createPost(data, {
       onSuccess: () => {
@@ -56,9 +61,19 @@ export default function PostCreationPage() {
         <Form.Item
           label="제목"
           name="title"
-          rules={[{ required: true, message: "제목을 입력해주세요" }]}
+          rules={[
+            { required: true, message: "제목을 입력해주세요" },
+            {
+              max: POST_LIMITS.TITLE_MAX_LENGTH,
+              message: `제목은 최대 ${POST_LIMITS.TITLE_MAX_LENGTH}자까지 입력 가능합니다.`,
+            },
+          ]}
         >
-          <Input placeholder="제목을 입력하세요" />
+          <Input
+            placeholder="제목을 입력하세요"
+            maxLength={POST_LIMITS.TITLE_MAX_LENGTH}
+            showCount
+          />
         </Form.Item>
 
         <Form.Item
@@ -78,9 +93,20 @@ export default function PostCreationPage() {
         <Form.Item
           label="내용"
           name="body"
-          rules={[{ required: true, message: "내용을 입력해주세요" }]}
+          rules={[
+            { required: true, message: "내용을 입력해주세요" },
+            {
+              max: POST_LIMITS.BODY_MAX_LENGTH,
+              message: `내용은 최대 ${POST_LIMITS.BODY_MAX_LENGTH}자까지 입력 가능합니다.`,
+            },
+          ]}
         >
-          <TextArea rows={10} placeholder="내용을 입력하세요" />
+          <TextArea
+            rows={10}
+            placeholder="내용을 입력하세요"
+            maxLength={POST_LIMITS.BODY_MAX_LENGTH}
+            showCount
+          />
         </Form.Item>
 
         <Form.Item
@@ -88,11 +114,7 @@ export default function PostCreationPage() {
           name="tags"
           tooltip="엔터를 눌러 태그를 추가하세요"
         >
-          <Select
-            mode="tags"
-            placeholder="태그를 입력하세요 (엔터로 추가)"
-            tokenSeparators={[","]}
-          />
+          <TagInput placeholder="태그를 입력하세요 (엔터로 추가)" />
         </Form.Item>
 
         <Form.Item>

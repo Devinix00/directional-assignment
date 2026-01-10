@@ -1,6 +1,7 @@
 import { EditOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, Space, Typography, Input } from "antd";
 import styles from "./PostTitle.module.scss";
+import { POST_LIMITS } from "../../../../../constants/post";
 
 const { Title } = Typography;
 
@@ -33,6 +34,8 @@ export default function PostTitle({
           onChange={(e) => onTitleChange(e.target.value)}
           className={styles.title_input}
           placeholder="제목을 입력하세요"
+          maxLength={POST_LIMITS.TITLE_MAX_LENGTH}
+          showCount
         />
         <Space align="center">
           <Button

@@ -1,6 +1,7 @@
 import { EditOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button, Space, Tag, Select } from "antd";
+import { Button, Space, Tag } from "antd";
 import styles from "./PostTags.module.scss";
+import TagInput from "../../../../../components/TagInput/TagInput";
 
 interface PostTagsProps {
   tags: string[];
@@ -27,13 +28,10 @@ export default function PostTags({
     return (
       <div className={styles.tags}>
         <div className={styles.tags_edit}>
-          <Select
-            mode="tags"
+          <TagInput
             value={editedTags !== undefined ? editedTags : tags}
             onChange={onTagsChange}
             placeholder="태그를 입력하세요 (엔터로 추가)"
-            tokenSeparators={[","]}
-            style={{ width: "100%" }}
           />
           <Space align="center">
             <Button

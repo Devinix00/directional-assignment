@@ -1,23 +1,27 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import styles from "./HomePage.module.scss";
 import PostList from "./components/postList/postList";
 import PostListFilter from "./components/postListFilter/PostListFilter";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 import { useGetPostListQuery } from "../../services/post/queries";
-import type { GetPostListParams } from "../../services/post/types";
-import { COLUMN_OPTIONS, type ColumnKey } from "./constants/postFilter";
+import { usePostListFilter } from "./hooks/usePostListFilter";
+import { usePostListColumnResize } from "./hooks/usePostListColumnResize";
 
 export default function HomePage() {
-  const [params, setParams] = useState<GetPostListParams>({
-    limit: 10,
-    sort: "createdAt",
-    order: "desc",
-    category: null,
-  });
-  const [searchValue, setSearchValue] = useState("");
-  const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>(
-    COLUMN_OPTIONS.map((col) => col.key)
-  );
+  const {
+    params,
+    searchValue,
+    setSearchValue,
+    handleFilterChange,
+    handleSearch,
+  } = usePostListFilter();
+
+  const {
+    visibleColumns,
+    setVisibleColumns,
+    columnWidths,
+    handleColumnWidthChange,
+  } = usePostListColumnResize();
 
   const { data, isLoading, fetchNextPage, hasNextPage } =
     useGetPostListQuery(params);
@@ -30,26 +34,6 @@ export default function HomePage() {
     fetchNextPage: fetchNextPage,
     hasNextPage: !!hasNextPage,
   });
-
-  const handleFilterChange = (
-    field: "category" | "sort" | "order",
-    value: string | null
-  ) => {
-    setParams((prev) => ({
-      ...prev,
-      [field]: value as GetPostListParams[typeof field],
-      nextCursor: undefined,
-    }));
-  };
-
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-    setParams((prev) => ({
-      ...prev,
-      search: value || undefined,
-      nextCursor: undefined,
-    }));
-  };
 
   return (
     <div className={styles.container}>
@@ -68,6 +52,8 @@ export default function HomePage() {
         loadMoreRef={loadMoreRef}
         hasNextPage={hasNextPage}
         visibleColumns={visibleColumns}
+        columnWidths={columnWidths}
+        onColumnWidthChange={handleColumnWidthChange}
       />
     </div>
   );

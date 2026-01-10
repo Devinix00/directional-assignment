@@ -7,6 +7,7 @@ import styles from "./PostList.module.scss";
 import PostListEmpty from "./postListEmpty/PostListEmpty";
 import { CATEGORY_OPTIONS } from "../../constants/postFilter";
 import type { ColumnKey } from "../../constants/postFilter";
+import ResizableTitle from "./ResizableTitle";
 
 interface PostListProps {
   posts: Post[];
@@ -14,6 +15,8 @@ interface PostListProps {
   loadMoreRef: React.RefObject<HTMLDivElement | null>;
   hasNextPage: boolean;
   visibleColumns: ColumnKey[];
+  columnWidths: Partial<Record<ColumnKey, number>>;
+  onColumnWidthChange: (key: ColumnKey, width: number) => void;
 }
 
 export default function PostList({
@@ -22,6 +25,8 @@ export default function PostList({
   loadMoreRef,
   hasNextPage,
   visibleColumns,
+  columnWidths,
+  onColumnWidthChange,
 }: PostListProps) {
   const allColumns: ColumnsType<Post> = useMemo(
     () => [
@@ -30,12 +35,13 @@ export default function PostList({
         dataIndex: "title",
         key: "title",
         ellipsis: true,
+        width: columnWidths.title,
       },
       {
         title: "카테고리",
         dataIndex: "category",
         key: "category",
-        width: 120,
+        width: columnWidths.category,
         render: (category: string) => {
           const option = CATEGORY_OPTIONS.find((opt) => opt.value === category);
           return <Tag color="blue">{option?.label || category}</Tag>;
@@ -45,6 +51,7 @@ export default function PostList({
         title: "태그",
         dataIndex: "tags",
         key: "tags",
+        width: columnWidths.tags,
         render: (tags: string[]) => (
           <Space wrap>
             {tags.map((tag) => (
@@ -57,24 +64,42 @@ export default function PostList({
         title: "작성일",
         dataIndex: "createdAt",
         key: "createdAt",
+        width: columnWidths.createdAt,
         render: (date: string) => dayjs(date).format("YYYY-MM-DD"),
       },
     ],
-    []
+    [columnWidths]
   );
 
   const columns = useMemo(() => {
-    return allColumns.filter((col) =>
-      visibleColumns.includes(col.key as ColumnKey)
-    );
-  }, [allColumns, visibleColumns]);
+    return allColumns
+      .filter((col) => visibleColumns.includes(col.key as ColumnKey))
+      .map((col) => {
+        const columnKey = col.key as ColumnKey;
+        const width = columnWidths[columnKey];
+        const titleText = col.title as React.ReactNode;
+
+        return {
+          ...col,
+          width,
+          title: (
+            <ResizableTitle
+              columnKey={columnKey}
+              width={width as number}
+              onResize={onColumnWidthChange}
+            >
+              {titleText}
+            </ResizableTitle>
+          ),
+        };
+      });
+  }, [allColumns, visibleColumns, columnWidths, onColumnWidthChange]);
 
   const tableProps: TableProps<Post> = {
     columns,
     dataSource: posts,
     rowKey: "id",
     loading: isLoading && posts.length === 0,
-    scroll: { x: 800 },
     pagination: false,
     size: "middle",
   };

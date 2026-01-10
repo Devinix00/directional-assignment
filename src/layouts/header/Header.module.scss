@@ -23,25 +23,5 @@
     @include laptop {
       width: 1024px;
     }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 20px;
-      font-weight: bold;
-      text-decoration: none;
-      color: $color-text;
-    }
-
-    .nav {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-
-      .logout_button {
-        padding: 0;
-      }
-    }
   }
 }

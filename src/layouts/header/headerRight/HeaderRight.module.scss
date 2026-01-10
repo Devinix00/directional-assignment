@@ -1,0 +1,40 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
+
+.right {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+
+  .nav_link {
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  .profile_buttons_container {
+    display: flex;
+    align-items: center;
+
+    .profile_button {
+      font-size: 20px;
+
+      @include tablet {
+        display: none;
+      }
+    }
+
+    .logout_button {
+      display: none;
+      padding: 0;
+      height: fit-content;
+
+      @include tablet {
+        display: block;
+      }
+    }
+  }
+}
+

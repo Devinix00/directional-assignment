@@ -102,9 +102,10 @@ export default function PostList({
     columns,
     dataSource: posts,
     rowKey: "id",
-    loading: isLoading && posts.length === 0,
+    loading: false,
     pagination: false,
     size: "middle",
+    locale: { emptyText: "" },
     onRow: (record) => ({
       onClick: () => {
         navigate(`${PATH.POST.ROOT}/${record.id}`);

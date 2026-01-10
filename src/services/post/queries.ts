@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import postApis from "./apis";
 import type { GetPostListParams, PostListResponse } from "./types";
+import useAuthStore from "../../stores/useAuthStore";
 
 export function useGetPostListQuery({
   queryKey,
@@ -9,6 +10,7 @@ export function useGetPostListQuery({
   queryKey: readonly unknown[];
   params?: GetPostListParams;
 }) {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   return useInfiniteQuery<PostListResponse>({
     queryKey,
     queryFn: ({ pageParam }) =>
@@ -18,6 +20,7 @@ export function useGetPostListQuery({
       }),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor || undefined,
+    enabled: isAuthenticated,
   });
 }
 

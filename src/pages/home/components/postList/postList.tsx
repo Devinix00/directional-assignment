@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import type { Post } from "../../../../services/post/types";
 import styles from "./PostList.module.scss";
 import PostListEmpty from "./postListEmpty/PostListEmpty";
+import PostListLoginRequired from "./postListLoginRequired/PostListLoginRequired";
 import { CATEGORY_OPTIONS } from "../../constants/postFilter";
 import type { ColumnKey } from "../../constants/postFilter";
 import ResizableTitle from "./ResizableTitle";
 import PATH from "../../../../router/path";
 import { useDeletePostMutation } from "../../../../services/post/mutations";
+import useAuthStore from "../../../../stores/useAuthStore";
 
 interface PostListProps {
   posts: Post[];
@@ -35,6 +37,7 @@ export default function PostList({
   postListQueryKey,
 }: PostListProps) {
   const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const { mutate: deletePost, isPending: isDeleting } =
     useDeletePostMutation(postListQueryKey);
 
@@ -162,13 +165,19 @@ export default function PostList({
 
   return (
     <div className={styles.container}>
-      {posts.length === 0 && !isLoading ? (
-        <PostListEmpty />
-      ) : (
+      {isAuthenticated ? (
         <>
-          <Table {...tableProps} />
-          {hasNextPage && <div ref={loadMoreRef} />}
+          {posts.length === 0 && !isLoading ? (
+            <PostListEmpty />
+          ) : (
+            <>
+              <Table {...tableProps} />
+              {hasNextPage && <div ref={loadMoreRef} />}
+            </>
+          )}
         </>
+      ) : (
+        <PostListLoginRequired />
       )}
     </div>
   );

@@ -1,0 +1,17 @@
+.tags {
+  margin-bottom: 16px;
+
+  .tags_display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tags_edit {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
+

@@ -21,6 +21,13 @@ export interface CreatePostRequest {
   tags: string[];
 }
 
+export interface UpdatePostRequest {
+  title?: string;
+  body?: string;
+  category?: "NOTICE" | "QNA" | "FREE";
+  tags?: string[];
+}
+
 export interface GetPostListParams {
   limit?: number;
   prevCursor?: string;

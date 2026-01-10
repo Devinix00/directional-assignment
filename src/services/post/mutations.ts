@@ -1,10 +1,45 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import postApis from "./apis";
-import type { CreatePostRequest, PostListResponse } from "./types";
+import type {
+  CreatePostRequest,
+  UpdatePostRequest,
+  PostListResponse,
+  Post,
+} from "./types";
 
 export function useCreatePostMutation() {
   return useMutation({
     mutationFn: (data: CreatePostRequest) => postApis.createPost(data),
+  });
+}
+
+export function useUpdatePostMutation(
+  queryKey: readonly unknown[],
+  postId: string
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: UpdatePostRequest) => postApis.updatePost(postId, data),
+    onMutate: async (updatedData) => {
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousData = queryClient.getQueryData<Post>(queryKey);
+
+      if (previousData) {
+        queryClient.setQueryData<Post>(queryKey, {
+          ...previousData,
+          ...updatedData,
+        });
+      }
+
+      return { previousData };
+    },
+    onError: (_err, _updatedData, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(queryKey, context.previousData);
+      }
+    },
   });
 }
 

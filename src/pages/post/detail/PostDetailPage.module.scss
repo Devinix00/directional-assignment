@@ -3,6 +3,7 @@
 
 .container {
   padding: 16px 0px;
+
   .back_button {
     margin-bottom: 16px;
   }
@@ -23,32 +24,11 @@
         align-items: center;
         gap: 12px;
         margin-bottom: 16px;
-
-        .date {
-          color: $color-text-tertiary;
-          font-size: 14px;
-        }
       }
-
-      .title {
-        margin: 0;
-        color: $color-text;
-      }
-    }
-
-    .tags {
-      margin-bottom: 16px;
     }
 
     .body {
-      .text {
-        white-space: pre-wrap;
-        word-break: break-word;
-        font-size: 16px;
-        line-height: 1.8;
-        color: $color-text;
-        margin: 0;
-      }
+      // PostBody 컴포넌트 내부 스타일은 컴포넌트 파일에서 관리
     }
   }
 }

@@ -2,6 +2,7 @@ import apiInstance from "../apiInstance";
 import type {
   PostListResponse,
   CreatePostRequest,
+  UpdatePostRequest,
   Post,
   GetPostListParams,
 } from "./types";
@@ -30,6 +31,10 @@ const postApis = {
   },
   deletePost: async (id: string): Promise<void> => {
     await apiInstance.delete(`/posts/${id}`);
+  },
+  updatePost: async (id: string, data: UpdatePostRequest): Promise<Post> => {
+    const response = await apiInstance.patch(`/posts/${id}`, data);
+    return response.data;
   },
 };
 

@@ -2,8 +2,8 @@ import { SearchOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Dropdown, Input, Select, Space } from "antd";
 import { useState } from "react";
 import type { GetPostListParams } from "../../../../services/post/types";
+import { CATEGORY_OPTIONS } from "../../../../constants/postCategory";
 import {
-  CATEGORY_OPTIONS,
   COLUMN_OPTIONS,
   ORDER_OPTIONS,
   SORT_OPTIONS,

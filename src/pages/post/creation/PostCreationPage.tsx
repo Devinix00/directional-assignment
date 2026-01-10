@@ -4,50 +4,23 @@ import type { FormProps } from "antd";
 import styles from "./PostCreationPage.module.scss";
 import { useCreatePostMutation } from "../../../services/post/mutations";
 import type { CreatePostRequest } from "../../../services/post/types";
-import { checkForbiddenWords } from "../../../utils/forbiddenWords";
-import { josa } from "es-hangul";
+import {
+  validateForbiddenWord,
+  validateTags,
+} from "../../../utils/postValidation";
+import { CATEGORY_OPTIONS } from "../../../constants/postCategory";
 
 const { Title } = Typography;
 const { TextArea } = Input;
 const { Option } = Select;
 
-const CATEGORY_OPTIONS = [
-  { value: "NOTICE", label: "공지사항" },
-  { value: "QNA", label: "Q&A" },
-  { value: "FREE", label: "자유게시판" },
-] as const;
+const POST_CATEGORY_OPTIONS = CATEGORY_OPTIONS.filter(
+  (option) => option.value !== null
+);
 
 export default function PostCreationPage() {
   const [form] = Form.useForm<CreatePostRequest>();
   const { mutate: createPost, isPending } = useCreatePostMutation();
-
-  const validateForbiddenWord = (text: string, fieldLabel: string): boolean => {
-    const forbiddenWord = checkForbiddenWords(text);
-    if (forbiddenWord) {
-      message.error(
-        `${fieldLabel}에 금지어 ${josa(
-          forbiddenWord,
-          "이/가"
-        )} 포함되어 있습니다.`
-      );
-      return true;
-    }
-    return false;
-  };
-
-  const validateTags = (tags: string[]): boolean => {
-    const tagWithForbiddenWord = tags.find((tag) => checkForbiddenWords(tag));
-    if (tagWithForbiddenWord) {
-      const tagForbiddenWord = checkForbiddenWords(tagWithForbiddenWord);
-      if (tagForbiddenWord) {
-        message.error(
-          `태그에 금지어 ${josa(tagForbiddenWord, "이/가")} 포함되어 있습니다.`
-        );
-        return true;
-      }
-    }
-    return false;
-  };
 
   const handleSubmit: FormProps<CreatePostRequest>["onFinish"] = (
     data: CreatePostRequest
@@ -94,7 +67,7 @@ export default function PostCreationPage() {
           rules={[{ required: true, message: "카테고리를 선택해주세요" }]}
         >
           <Select placeholder="카테고리를 선택하세요">
-            {CATEGORY_OPTIONS.map((option) => (
+            {POST_CATEGORY_OPTIONS.map((option) => (
               <Option key={option.value} value={option.value}>
                 {option.label}
               </Option>

@@ -10,7 +10,7 @@ export default function PostListEmpty() {
   const navigate = useNavigate();
 
   const handleClickCreatePost = () => {
-    navigate(PATH.POST_CREATION);
+    navigate(PATH.POST.CREATION);
   };
 
   return (

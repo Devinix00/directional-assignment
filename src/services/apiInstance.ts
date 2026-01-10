@@ -4,6 +4,7 @@ import axios, {
   type AxiosResponse,
   type InternalAxiosRequestConfig,
 } from "axios";
+import { message } from "antd";
 
 const apiInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -24,7 +25,13 @@ apiInstance.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    console.error(error);
+    const errorMessage =
+      (error.response?.data as { message: string }).message || error.message;
+
+    if (errorMessage) {
+      message.error(errorMessage);
+    }
+
     return Promise.reject(error);
   }
 );

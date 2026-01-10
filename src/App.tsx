@@ -1,11 +1,10 @@
+import QueryProvider from "./providers/QueryProvider";
 import Router from "./router/router";
 
-function App() {
+export default function App() {
   return (
-    <>
+    <QueryProvider>
       <Router />
-    </>
+    </QueryProvider>
   );
 }
-
-export default App;

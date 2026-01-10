@@ -75,3 +75,36 @@ export function useDeletePostMutation(queryKey: readonly unknown[]) {
     },
   });
 }
+
+export function useDeleteAllPostsMutation(queryKey: readonly unknown[]) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => postApis.deleteAllPosts(),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousData = queryClient.getQueryData<{
+        pages: PostListResponse[];
+        pageParams?: unknown[];
+      }>(queryKey);
+
+      if (previousData?.pages) {
+        queryClient.setQueryData(queryKey, {
+          ...previousData,
+          pages: previousData.pages.map((page) => ({
+            ...page,
+            items: [],
+          })),
+        });
+      }
+
+      return { previousData };
+    },
+    onError: (_err, _variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(queryKey, context.previousData);
+      }
+    },
+  });
+}

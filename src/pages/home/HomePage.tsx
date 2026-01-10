@@ -50,6 +50,7 @@ export default function HomePage() {
         onFilterChange={handleFilterChange}
         visibleColumns={visibleColumns}
         onColumnVisibilityChange={setVisibleColumns}
+        postListQueryKey={postListQueryKey}
       />
       <PostList
         posts={allPosts}

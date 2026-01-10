@@ -29,12 +29,15 @@ const postApis = {
     const response = await apiInstance.get(`/posts/${id}`);
     return response.data;
   },
-  deletePost: async (id: string): Promise<void> => {
+  deletePost: async (id: string) => {
     await apiInstance.delete(`/posts/${id}`);
   },
   updatePost: async (id: string, data: UpdatePostRequest): Promise<Post> => {
     const response = await apiInstance.patch(`/posts/${id}`, data);
     return response.data;
+  },
+  deleteAllPosts: async () => {
+    await apiInstance.delete("/posts");
   },
 };
 

@@ -1,5 +1,9 @@
-import { SearchOutlined, SettingOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Dropdown, Input, Select, Space } from "antd";
+import {
+  SearchOutlined,
+  SettingOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Button, Checkbox, Dropdown, Input, Modal, Select, Space } from "antd";
 import { useState } from "react";
 import type { GetPostListParams } from "../../../../services/post/types";
 import { CATEGORY_OPTIONS } from "../../../../constants/post";
@@ -10,6 +14,7 @@ import {
   type ColumnKey,
 } from "../../constants/postFilter";
 import styles from "./PostListFilter.module.scss";
+import { useDeleteAllPostsMutation } from "../../../../services/post/mutations";
 const { Search } = Input;
 const { Option } = Select;
 
@@ -24,6 +29,7 @@ interface PostListFilterProps {
   ) => void;
   visibleColumns: ColumnKey[];
   onColumnVisibilityChange: (columns: ColumnKey[]) => void;
+  postListQueryKey: readonly unknown[];
 }
 
 function PostListFilter({
@@ -34,11 +40,27 @@ function PostListFilter({
   onFilterChange,
   visibleColumns,
   onColumnVisibilityChange,
+  postListQueryKey,
 }: PostListFilterProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { mutate: deleteAllPosts, isPending: isDeletingAll } =
+    useDeleteAllPostsMutation(postListQueryKey);
 
   const handleColumnChange = (checkedValues: string[]) => {
     onColumnVisibilityChange(checkedValues as ColumnKey[]);
+  };
+
+  const handleDeleteAll = () => {
+    Modal.confirm({
+      title: "전체 게시글 삭제",
+      content: "정말 모든 게시글을 삭제하시겠습니까?",
+      okText: "삭제",
+      okType: "danger",
+      cancelText: "취소",
+      onOk: () => {
+        deleteAllPosts();
+      },
+    });
   };
 
   const columnMenuItems = [
@@ -128,6 +150,15 @@ function PostListFilter({
             컬럼 설정
           </Button>
         </Dropdown>
+        <Button
+          danger
+          icon={<DeleteOutlined />}
+          onClick={handleDeleteAll}
+          loading={isDeletingAll}
+          className={styles.delete_all_button}
+        >
+          전체 삭제
+        </Button>
       </Space>
     </div>
   );

@@ -6,13 +6,9 @@ import { useLoginMutation } from "../../services/auth/mutations";
 import useAuthStore from "../../stores/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import PATH from "../../router/path";
+import type { LoginRequest } from "../../services/auth/types";
 
 const { Title } = Typography;
-
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
 
 export default function LoginPage() {
   const [form] = Form.useForm();
@@ -21,20 +17,16 @@ export default function LoginPage() {
   const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
   const navigate = useNavigate();
 
-  const handleSubmit: FormProps<LoginFormValues>["onFinish"] = ({
-    email,
-    password,
-  }) => {
-    login(
-      { email, password },
-      {
-        onSuccess: (data) => {
-          setToken(data.token);
-          setIsAuthenticated(true);
-          navigate(PATH.HOME);
-        },
-      }
-    );
+  const handleSubmit: FormProps<LoginRequest>["onFinish"] = (
+    data: LoginRequest
+  ) => {
+    login(data, {
+      onSuccess: (data) => {
+        setToken(data.token);
+        setIsAuthenticated(true);
+        navigate(PATH.HOME);
+      },
+    });
   };
 
   return (

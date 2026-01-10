@@ -1,15 +1,9 @@
 import apiInstance from "../apiInstance";
-import type { LoginResponse } from "./types";
+import type { LoginRequest, LoginResponse } from "./types";
 
 const authApis = {
-  login: async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }): Promise<LoginResponse> => {
-    const response = await apiInstance.post("/auth/login", { email, password });
+  login: async (data: LoginRequest): Promise<LoginResponse> => {
+    const response = await apiInstance.post("/auth/login", data);
     return response.data;
   },
 };

@@ -21,6 +21,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
   };
 
   const handleClickLogout = () => {
+    onClose();
     logout();
   };
 

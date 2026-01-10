@@ -62,19 +62,7 @@ export function usePostEdit({ post, updatePost }: UsePostEditParams) {
     field: "title" | "body" | "category" | "tags",
     value: string | "NOTICE" | "QNA" | "FREE" | string[]
   ) => {
-    if (field === "tags" && Array.isArray(value)) {
-      const uniqueTags: string[] = [];
-      const seen = new Set<string>();
-      for (const tag of value) {
-        if (!seen.has(tag)) {
-          seen.add(tag);
-          uniqueTags.push(tag);
-        }
-      }
-      setEditedValues({ ...editedValues, [field]: uniqueTags });
-    } else {
-      setEditedValues({ ...editedValues, [field]: value });
-    }
+    setEditedValues({ ...editedValues, [field]: value });
   };
 
   const handleSaveField = (field: EditingField) => {

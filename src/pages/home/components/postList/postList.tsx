@@ -105,7 +105,6 @@ export default function PostList({
         title: "삭제",
         key: "actions",
         width: 80,
-        fixed: "right" as const,
         render: (_: unknown, record: Post) => (
           <Button
             type="text"
@@ -157,6 +156,7 @@ export default function PostList({
     loading: false,
     pagination: false,
     size: "middle",
+    scroll: { x: "max-content" },
     locale: { emptyText: "" },
     onRow: (record) => ({
       onClick: () => {

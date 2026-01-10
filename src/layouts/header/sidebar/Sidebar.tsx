@@ -67,6 +67,13 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
           <Link to={PATH.HOME} className={styles.nav_item} onClick={onClose}>
             홈
           </Link>
+          <Link
+            to={PATH.POST_CREATION}
+            className={styles.nav_item}
+            onClick={onClose}
+          >
+            게시글 작성
+          </Link>
         </nav>
       </div>
       <div className={styles.footer}>

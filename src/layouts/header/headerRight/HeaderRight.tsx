@@ -14,6 +14,9 @@ export default function HeaderRight() {
       <Link to={PATH.HOME} className={styles.nav_link}>
         홈
       </Link>
+      <Link to={PATH.POST_CREATION} className={styles.nav_link}>
+        게시글 작성
+      </Link>
       {isAuthenticated ? (
         <div className={styles.profile_buttons_container}>
           <Button
@@ -37,4 +40,3 @@ export default function HeaderRight() {
     </div>
   );
 }
-

@@ -13,3 +13,10 @@ export interface Post {
   tags: string[];
   createdAt: string;
 }
+
+export interface CreatePostRequest {
+  title: string;
+  body: string;
+  category: "NOTICE" | "QNA" | "FREE";
+  tags: string[];
+}

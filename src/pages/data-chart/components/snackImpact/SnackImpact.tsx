@@ -50,8 +50,6 @@ export default function SnackImpact() {
     });
   }, [data]);
 
-  console.log("visibleLegendItems", visibleLegendItems);
-
   if (isLoading || !data || !data.departments || data.departments.length === 0)
     return null;
 

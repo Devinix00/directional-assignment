@@ -5,6 +5,7 @@ import WeeklyMoodTrend from "./components/weeklyMoodTrend/WeeklyMoodTrend";
 import PopularSnackBrands from "./components/popularSnackBrands/PopularSnackBrands";
 import WeeklyWorkoutTrend from "./components/weeklyWorkoutTrend/WeeklyWorkoutTrend";
 import CoffeeConsumption from "./components/coffeeConsumption/CoffeeConsumption";
+import SnackImpact from "./components/snackImpact/SnackImpact";
 
 function DataChartPage() {
   const [activeKey, setActiveKey] = useState<ChartTabKey>("weekly-mood-trend");
@@ -21,6 +22,7 @@ function DataChartPage() {
       {activeKey === "popular-snack-brands" && <PopularSnackBrands />}
       {activeKey === "weekly-workout-trend" && <WeeklyWorkoutTrend />}
       {activeKey === "coffee-consumption" && <CoffeeConsumption />}
+      {activeKey === "snack-impact" && <SnackImpact />}
     </div>
   );
 }

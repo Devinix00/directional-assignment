@@ -10,14 +10,14 @@ import {
 } from "recharts";
 import ChartLegend from "../../../../components/chartLegend/ChartLegend";
 import { useChartLegend } from "../../../../hooks/useChartLegend";
-import { useGetCoffeeConsumptionQuery } from "../../../../services/mock/queries";
+import { useGetSnackImpactQuery } from "../../../../services/mock/queries";
 import mockQueryKeys from "../../../../services/mock/queryKeys";
-import styles from "./CoffeeConsumption.module.scss";
-import INITIAL_COFFEE_CONSUMPTION_LEGEND_ITEMS from "./constants/initialCoffeeConsumptionLegend";
+import styles from "./SnackImpact.module.scss";
+import INITIAL_SNACK_IMPACT_LEGEND_ITEMS from "./constants/initialSnackImpactLegend";
 
-export default function CoffeeConsumption() {
-  const { data, isLoading } = useGetCoffeeConsumptionQuery({
-    queryKey: mockQueryKeys.coffeeConsumption(),
+export default function SnackImpact() {
+  const { data, isLoading } = useGetSnackImpactQuery({
+    queryKey: mockQueryKeys.snackImpact(),
   });
 
   const {
@@ -26,29 +26,34 @@ export default function CoffeeConsumption() {
     visibleLegendItems,
     handleColorChange,
     handleVisibilityChange,
-  } = useChartLegend(INITIAL_COFFEE_CONSUMPTION_LEGEND_ITEMS);
+  } = useChartLegend(INITIAL_SNACK_IMPACT_LEGEND_ITEMS);
 
   const chartData = useMemo(() => {
-    if (!data?.teams) return [];
+    if (!data?.departments) return [];
 
-    const cups = [
-      ...new Set(data.teams.flatMap((team) => team.series.map((s) => s.cups))),
+    const snacks = [
+      ...new Set(
+        data.departments.flatMap((dept) => dept.metrics.map((m) => m.snacks))
+      ),
     ].sort((a, b) => a - b);
 
-    return cups.map((cup) => {
-      const point: Record<string, number | string> = { cups: cup };
-      data.teams.forEach((team) => {
-        const item = team.series.find((s) => s.cups === cup);
+    return snacks.map((snack) => {
+      const point: Record<string, number | string> = { snacks: snack };
+      data.departments.forEach((department) => {
+        const item = department.metrics.find((m) => m.snacks === snack);
         if (item) {
-          point[`${team.team}_bugs`] = item.bugs;
-          point[`${team.team}_productivity`] = item.productivity;
+          point[`${department.name}_meetingsMissed`] = item.meetingsMissed;
+          point[`${department.name}_morale`] = item.morale;
         }
       });
       return point;
     });
   }, [data]);
 
-  if (isLoading || !data || !data.teams || data.teams.length === 0) return null;
+  console.log("visibleLegendItems", visibleLegendItems);
+
+  if (isLoading || !data || !data.departments || data.departments.length === 0)
+    return null;
 
   return (
     <div className={styles.container}>
@@ -63,34 +68,41 @@ export default function CoffeeConsumption() {
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
-                dataKey="cups"
+                dataKey="snacks"
                 allowDuplicatedCategory={false}
                 label={{
-                  value: "커피 섭취량 (잔/일)",
+                  value: "스낵 수",
                   position: "insideBottom",
                   offset: -2.5,
                 }}
               />
               <YAxis
                 yAxisId="left"
-                label={{ value: "버그 수", angle: -90, position: "insideLeft" }}
+                label={{
+                  value: "회의불참",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
               />
               <YAxis
                 yAxisId="right"
                 orientation="right"
                 label={{
-                  value: "생산성 점수",
+                  value: "사기",
                   angle: 90,
                   position: "insideRight",
                 }}
               />
               <Tooltip shared={false} trigger="hover" />
               {visibleLegendItems.map((item) => {
-                const isBugs = item.name.endsWith("_bugs");
-                const isProductivity = item.name.endsWith("_productivity");
-                const team = item.name.replace(/_bugs$|_productivity$/, "");
+                const isMeetingsMissed = item.name.endsWith("_meetingsMissed");
+                const isMorale = item.name.endsWith("_morale");
+                const department = item.name.replace(
+                  /_meetingsMissed$|_morale$/,
+                  ""
+                );
 
-                if (isBugs) {
+                if (isMeetingsMissed) {
                   return (
                     <Line
                       key={item.name}
@@ -100,12 +112,12 @@ export default function CoffeeConsumption() {
                       stroke={colorMap[item.name] || "#888888"}
                       strokeWidth={2}
                       dot={{ r: 4, fill: colorMap[item.name] || "#888888" }}
-                      name={`${team} (버그)`}
+                      name={`${department} (회의불참)`}
                     />
                   );
                 }
 
-                if (isProductivity) {
+                if (isMorale) {
                   return (
                     <Line
                       key={item.name}
@@ -129,7 +141,7 @@ export default function CoffeeConsumption() {
                           />
                         )
                       }
-                      name={`${team} (생산성)`}
+                      name={`${department} (사기)`}
                     />
                   );
                 }

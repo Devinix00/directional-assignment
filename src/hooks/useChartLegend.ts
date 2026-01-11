@@ -1,9 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ChartLegendItem } from "../components/chartLegend/ChartLegend";
 
 export function useChartLegend(initialItems: ChartLegendItem[]) {
   const [legendItems, setLegendItems] =
     useState<ChartLegendItem[]>(initialItems);
+
+  useEffect(() => {
+    setLegendItems(initialItems);
+  }, [initialItems]);
 
   const colorMap = useMemo(() => {
     return Object.fromEntries(

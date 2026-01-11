@@ -38,7 +38,7 @@ export default function SnackImpact() {
     ].sort((a, b) => a - b);
 
     return snacks.map((snack) => {
-      const point: Record<string, number | string> = { snacks: snack };
+      const point: Record<string, number> = { snacks: snack };
       data.departments.forEach((department) => {
         const item = department.metrics.find((m) => m.snacks === snack);
         if (item) {

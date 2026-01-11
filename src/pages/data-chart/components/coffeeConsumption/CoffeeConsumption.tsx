@@ -36,7 +36,7 @@ export default function CoffeeConsumption() {
     ].sort((a, b) => a - b);
 
     return cups.map((cup) => {
-      const point: Record<string, number | string> = { cups: cup };
+      const point: Record<string, number> = { cups: cup };
       data.teams.forEach((team) => {
         const item = team.series.find((s) => s.cups === cup);
         if (item) {

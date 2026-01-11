@@ -1,3 +1,7 @@
+## [배포 링크]
+
+https://directional-assignment.netlify.app
+
 ## [실행 방법]
 
 npm i 로 패키지 다운 후 npm run dev (서버 url .env 환경변수 처리되어있습니다.)

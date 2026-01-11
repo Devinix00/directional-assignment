@@ -10,13 +10,11 @@ export function useChartLegend(initialItems: ChartLegendItem[]) {
   }, [initialItems]);
 
   const nameGroups = useMemo(() => {
-    const groups = new Map<string, string[]>();
-    initialItems.forEach((item) => {
+    return initialItems.reduce((acc, item) => {
       const groupName = item.name.split("_")[0];
-      const names = groups.get(groupName) || [];
-      groups.set(groupName, [...names, item.name]);
-    });
-    return groups;
+      (acc[groupName] = acc[groupName] || []).push(item.name);
+      return acc;
+    }, {} as Record<string, string[]>);
   }, [initialItems]);
 
   const colorMap = useMemo(() => {
@@ -32,7 +30,7 @@ export function useChartLegend(initialItems: ChartLegendItem[]) {
 
   const handleColorChange = (name: string, color: string) => {
     const groupName = name.split("_")[0];
-    const groupNames = nameGroups.get(groupName) || [];
+    const groupNames = nameGroups[groupName] || [];
 
     setLegendItems((prev) =>
       prev.map((item) =>

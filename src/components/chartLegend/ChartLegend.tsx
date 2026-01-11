@@ -19,31 +19,50 @@ export default function ChartLegend({
   onColorChange,
   onVisibilityChange,
 }: ChartLegendProps) {
+  const groups = Object.entries(
+    items.reduce((acc, item) => {
+      const groupName = item.name.split("_")[0];
+      (acc[groupName] = acc[groupName] || []).push(item);
+      return acc;
+    }, {} as Record<string, typeof items>)
+  );
+
   return (
     <div className={styles.legend}>
       <div className={styles.legend_container}>
-        {items.map((item) => (
-          <div key={item.name} className={styles.legend_item}>
-            <Checkbox
-              checked={item.visible}
-              onChange={(e) => onVisibilityChange(item.name, e.target.checked)}
-            >
-              <Space>
-                <div
-                  className={styles.color_box}
-                  style={{ backgroundColor: item.color }}
+        {groups.map(([groupName, groupItems], groupIndex) => (
+          <div
+            key={groupName}
+            className={`${styles.legend_group} ${
+              groupIndex < groups.length - 1 ? styles.has_border : ""
+            }`}
+          >
+            {groupItems.map((item) => (
+              <div key={item.name} className={styles.legend_item}>
+                <Checkbox
+                  checked={item.visible}
+                  onChange={(e) =>
+                    onVisibilityChange(item.name, e.target.checked)
+                  }
+                >
+                  <Space>
+                    <div
+                      className={styles.color_box}
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span>{item.name}</span>
+                  </Space>
+                </Checkbox>
+                <ColorPicker
+                  value={item.color}
+                  onChange={(color: Color) =>
+                    onColorChange(item.name, color.toHexString())
+                  }
+                  showText
+                  size="small"
                 />
-                <span>{item.name}</span>
-              </Space>
-            </Checkbox>
-            <ColorPicker
-              value={item.color}
-              onChange={(color: Color) =>
-                onColorChange(item.name, color.toHexString())
-              }
-              showText
-              size="small"
-            />
+              </div>
+            ))}
           </div>
         ))}
       </div>

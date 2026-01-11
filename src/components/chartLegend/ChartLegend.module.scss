@@ -8,6 +8,19 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+    align-items: center;
+
+    .legend_group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      padding-right: 16px;
+
+      &.has_border {
+        border-right: 1px solid #8c8c8c;
+      }
+    }
 
     .legend_item {
       display: flex;

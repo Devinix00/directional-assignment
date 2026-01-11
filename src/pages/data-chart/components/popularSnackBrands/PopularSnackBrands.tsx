@@ -49,11 +49,9 @@ function PopularSnackBrands() {
               cx="50%"
               cy="50%"
               innerRadius={60}
-              outerRadius={120}
-              paddingAngle={5}
               dataKey="value"
-              label={({ name, percent }: { name?: string; percent?: number }) =>
-                `${name || ""}: ${percent ? (percent * 100).toFixed(0) : 0}%`
+              label={({ name, value }: { name?: string; value?: number }) =>
+                `${name || ""}: ${value || 0}`
               }
             >
               {chartData.map((entry, index) => (

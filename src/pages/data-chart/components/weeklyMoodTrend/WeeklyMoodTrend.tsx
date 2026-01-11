@@ -4,11 +4,15 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
+import { useMemo } from "react";
 import ChartLegend from "../../../../components/chartLegend/ChartLegend";
 import { useChartLegend } from "../../../../hooks/useChartLegend";
 import { useGetWeeklyMoodTrendQuery } from "../../../../services/mock/queries";
@@ -29,6 +33,22 @@ export default function WeeklyMoodTrend() {
     handleVisibilityChange,
   } = useChartLegend(INITIAL_WEEKLY_MOOD_TREND_LEGEND_ITEMS);
 
+  const donutChartData = useMemo(() => {
+    if (!data) return [];
+    return visibleLegendItems.map((item) => {
+      const total = data.reduce(
+        (sum, week) =>
+          sum + ((week[item.label as keyof typeof week] as number) || 0),
+        0
+      );
+      return {
+        name: item.label,
+        value: total,
+        fill: colorMap[item.label] || "#888888",
+      };
+    });
+  }, [data, visibleLegendItems, colorMap]);
+
   if (isLoading || !data || data.length === 0) return null;
 
   return (
@@ -44,7 +64,7 @@ export default function WeeklyMoodTrend() {
             <BarChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="week" />
-              <YAxis />
+              <YAxis tickFormatter={(value) => `${value}%`} />
               <Tooltip />
               {visibleLegendItems.map((item) => (
                 <Bar
@@ -59,10 +79,31 @@ export default function WeeklyMoodTrend() {
         </div>
         <div className={styles.chart_item}>
           <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={donutChartData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                dataKey="value"
+                label={({ name, value }: { name?: string; value?: number }) =>
+                  `${name || ""}: ${value || 0}`
+                }
+              >
+                {donutChartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className={styles.chart_item}>
+          <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="week" />
-              <YAxis />
+              <YAxis tickFormatter={(value) => `${value}%`} />
               <Tooltip />
               {visibleLegendItems.map((item) => (
                 <Area

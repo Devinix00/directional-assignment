@@ -1,7 +1,7 @@
 import { EditOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, Space, Tag } from "antd";
 import styles from "./PostTags.module.scss";
-import TagInput from "../../../../../components/TagInput/TagInput";
+import TagInput from "../../../../../components/tagInput/TagInput";
 
 interface PostTagsProps {
   tags: string[];

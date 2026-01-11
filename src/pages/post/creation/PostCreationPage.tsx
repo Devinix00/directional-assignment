@@ -11,7 +11,7 @@ import {
   validateBodyLength,
 } from "../../../utils/postValidation";
 import { CATEGORY_OPTIONS, POST_LIMITS } from "../../../constants/post";
-import TagInput from "../../../components/TagInput/TagInput";
+import TagInput from "../../../components/tagInput/TagInput";
 
 const { Title } = Typography;
 const { TextArea } = Input;

@@ -12,7 +12,7 @@ export default function HomePage() {
   const {
     params,
     searchValue,
-    setSearchValue,
+    handleSetSearchValue,
     handleFilterChange,
     handleSearch,
   } = usePostListFilter();
@@ -44,7 +44,7 @@ export default function HomePage() {
     <div className={styles.container}>
       <PostListFilter
         searchValue={searchValue}
-        setSearchValue={setSearchValue}
+        handleSetSearchValue={handleSetSearchValue}
         onSearch={handleSearch}
         params={params}
         onFilterChange={handleFilterChange}

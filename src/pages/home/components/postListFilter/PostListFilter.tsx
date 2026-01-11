@@ -20,7 +20,7 @@ const { Option } = Select;
 
 interface PostListFilterProps {
   searchValue: string;
-  setSearchValue: (value: string) => void;
+  handleSetSearchValue: (value: string) => void;
   onSearch: (value: string) => void;
   params: GetPostListParams;
   onFilterChange: (
@@ -34,7 +34,7 @@ interface PostListFilterProps {
 
 function PostListFilter({
   searchValue,
-  setSearchValue,
+  handleSetSearchValue,
   onSearch,
   params,
   onFilterChange,
@@ -94,7 +94,7 @@ function PostListFilter({
           size="large"
           className={styles.search_input}
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={(e) => handleSetSearchValue(e.target.value)}
           onSearch={onSearch}
         />
 

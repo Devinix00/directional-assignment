@@ -1,39 +1,75 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import type { GetPostListParams } from "../../../services/post/types";
 
+const DEFAULT_LIMIT = 10;
+const DEFAULT_SORT = "createdAt";
+const DEFAULT_ORDER = "desc";
+
 export function usePostListFilter() {
-  const [params, setParams] = useState<GetPostListParams>({
-    limit: 10,
-    sort: "createdAt",
-    order: "desc",
-    category: null,
-  });
-  const [searchValue, setSearchValue] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const params = useMemo<GetPostListParams>(() => {
+    const limit = searchParams.get("limit");
+    const sort = searchParams.get("sort");
+    const order = searchParams.get("order");
+    const category = searchParams.get("category");
+    const search = searchParams.get("search");
+
+    return {
+      limit: limit ? Number(limit) : DEFAULT_LIMIT,
+      sort: (sort as GetPostListParams["sort"]) || DEFAULT_SORT,
+      order: (order as GetPostListParams["order"]) || DEFAULT_ORDER,
+      category:
+        category === "NOTICE" || category === "QNA" || category === "FREE"
+          ? category
+          : null,
+      search: search || undefined,
+    };
+  }, [searchParams]);
+
+  const searchFromUrl = useMemo(() => {
+    return searchParams.get("search") || "";
+  }, [searchParams]);
+
+  const [localSearchValue, setLocalSearchValue] = useState(searchFromUrl);
+  const searchValue = localSearchValue;
+
+  const updateSearchParams = (updates: Record<string, string | null>) => {
+    const newParams = new URLSearchParams(searchParams);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === null || value === "" || value === undefined) {
+        newParams.delete(key);
+      } else {
+        newParams.set(key, value);
+      }
+    });
+
+    newParams.delete("nextCursor");
+    setSearchParams(newParams, { replace: true });
+  };
 
   const handleFilterChange = (
     field: "category" | "sort" | "order",
     value: string | null
   ) => {
-    setParams((prev) => ({
-      ...prev,
-      [field]: value as GetPostListParams[typeof field],
-      nextCursor: undefined,
-    }));
+    updateSearchParams({ [field]: value });
   };
 
   const handleSearch = (value: string) => {
-    setSearchValue(value);
-    setParams((prev) => ({
-      ...prev,
-      search: value || undefined,
-      nextCursor: undefined,
-    }));
+    setLocalSearchValue(value);
+    updateSearchParams({ search: value || null });
   };
+
+  const handleSetSearchValue = useCallback((value: string) => {
+    setLocalSearchValue(value);
+  }, []);
 
   return {
     params,
     searchValue,
-    setSearchValue,
+    handleSetSearchValue,
     handleFilterChange,
     handleSearch,
   };

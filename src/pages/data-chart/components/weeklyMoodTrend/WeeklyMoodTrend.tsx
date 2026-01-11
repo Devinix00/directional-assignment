@@ -9,10 +9,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useMemo, useState } from "react";
-import ChartLegend, {
-  type ChartLegendItem,
-} from "../../../../components/chartLegend/ChartLegend";
+import ChartLegend from "../../../../components/chartLegend/ChartLegend";
+import { useChartLegend } from "../../../../hooks/useChartLegend";
 import { useGetWeeklyMoodTrendQuery } from "../../../../services/mock/queries";
 import mockQueryKeys from "../../../../services/mock/queryKeys";
 import INITIAL_WEEKLY_MOOD_TREND_LEGEND_ITEMS from "./constants/initialWeeklyMoodTrendLegend";
@@ -23,32 +21,13 @@ export default function WeeklyMoodTrend() {
     queryKey: mockQueryKeys.weeklyMoodTrend(),
   });
 
-  const [legendItems, setLegendItems] = useState<ChartLegendItem[]>(
-    INITIAL_WEEKLY_MOOD_TREND_LEGEND_ITEMS
-  );
-
-  const colorMap = useMemo(() => {
-    return Object.fromEntries(
-      legendItems.map((item) => [item.label, item.color])
-    );
-  }, [legendItems]);
-
-  const visibleLegendItems = useMemo(
-    () => legendItems.filter((item) => item.visible),
-    [legendItems]
-  );
-
-  const handleColorChange = (label: string, color: string) => {
-    setLegendItems((prev) =>
-      prev.map((item) => (item.label === label ? { ...item, color } : item))
-    );
-  };
-
-  const handleVisibilityChange = (label: string, visible: boolean) => {
-    setLegendItems((prev) =>
-      prev.map((item) => (item.label === label ? { ...item, visible } : item))
-    );
-  };
+  const {
+    legendItems,
+    colorMap,
+    visibleLegendItems,
+    handleColorChange,
+    handleVisibilityChange,
+  } = useChartLegend(INITIAL_WEEKLY_MOOD_TREND_LEGEND_ITEMS);
 
   if (isLoading || !data || data.length === 0) return null;
 

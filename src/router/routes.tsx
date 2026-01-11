@@ -5,6 +5,7 @@ import LoginPage from "../pages/login/LoginPage";
 import PostCreationPage from "../pages/post/creation/PostCreationPage";
 import PostDetailPage from "../pages/post/detail/PostDetailPage";
 import NotFoundPage from "../pages/notFound/NotFoundPage";
+import DataChartPage from "../pages/data-chart/DataChartPage";
 
 const routes = [
   {
@@ -21,6 +22,10 @@ const routes = [
       {
         path: `${PATH.POST.ROOT}/:id`,
         element: <PostDetailPage />,
+      },
+      {
+        path: PATH.DATA_CHART,
+        element: <DataChartPage />,
       },
       {
         path: PATH.NOT_FOUND,

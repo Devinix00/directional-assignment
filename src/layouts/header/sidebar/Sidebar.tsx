@@ -75,6 +75,13 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
           >
             게시글 작성
           </Link>
+          <Link
+            to={PATH.DATA_CHART}
+            className={styles.nav_item}
+            onClick={onClose}
+          >
+            데이터 차트
+          </Link>
         </nav>
       </div>
       <div className={styles.footer}>

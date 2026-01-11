@@ -6,6 +6,7 @@ const PATH = {
     CREATION: "/post/creation",
     DETAIL: "/post/:id",
   },
+  DATA_CHART: "/data-chart",
   NOT_FOUND: "*",
 };
 

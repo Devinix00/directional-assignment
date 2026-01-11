@@ -17,6 +17,9 @@ export default function HeaderRight() {
       <Link to={PATH.POST.CREATION} className={styles.nav_link}>
         게시글 작성
       </Link>
+      <Link to={PATH.DATA_CHART} className={styles.nav_link}>
+        데이터 차트
+      </Link>
       {isAuthenticated ? (
         <div className={styles.profile_buttons_container}>
           <Button

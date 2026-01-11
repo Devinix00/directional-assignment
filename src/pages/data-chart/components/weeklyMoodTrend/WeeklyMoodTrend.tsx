@@ -1,10 +1,10 @@
+import { useMemo } from "react";
 import {
   Area,
   AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -12,7 +12,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useMemo } from "react";
 import ChartLegend from "../../../../components/chartLegend/ChartLegend";
 import { useChartLegend } from "../../../../hooks/useChartLegend";
 import { useGetWeeklyMoodTrendQuery } from "../../../../services/mock/queries";
@@ -89,11 +88,7 @@ export default function WeeklyMoodTrend() {
                 label={({ name, value }: { name?: string; value?: number }) =>
                   `${name || ""}: ${value || 0}`
                 }
-              >
-                {donutChartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                ))}
-              </Pie>
+              />
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>

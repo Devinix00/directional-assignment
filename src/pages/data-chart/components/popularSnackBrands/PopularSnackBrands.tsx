@@ -1,5 +1,15 @@
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { useMemo } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import ChartLegend from "../../../../components/chartLegend/ChartLegend";
 import { useChartLegend } from "../../../../hooks/useChartLegend";
 import { useGetPopularSnackBrandsQuery } from "../../../../services/mock/queries";
@@ -41,26 +51,35 @@ function PopularSnackBrands() {
         onColorChange={handleColorChange}
         onVisibilityChange={handleVisibilityChange}
       />
-      <div className={styles.chart_container}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              dataKey="value"
-              label={({ name, value }: { name?: string; value?: number }) =>
-                `${name || ""}: ${value || 0}`
-              }
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.fill} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
+      <div className={styles.charts}>
+        <div className={styles.chart_item}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="value" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className={styles.chart_item}>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                dataKey="value"
+                label={({ name, value }: { name?: string; value?: number }) =>
+                  `${name || ""}: ${value || 0}`
+                }
+              />
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

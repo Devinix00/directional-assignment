@@ -33,11 +33,11 @@ function PopularSnackBrands() {
   const chartData = useMemo(() => {
     if (!data) return [];
     return visibleLegendItems.map((item) => {
-      const dataItem = data.find((d) => d.name === item.label);
+      const dataItem = data.find((d) => d.name === item.name);
       return {
-        name: item.label,
+        name: item.name,
         value: dataItem?.share || 0,
-        fill: colorMap[item.label] || "#888888",
+        fill: colorMap[item.name] || "#888888",
       };
     });
   }, [data, visibleLegendItems, colorMap]);

@@ -37,13 +37,13 @@ export default function WeeklyMoodTrend() {
     return visibleLegendItems.map((item) => {
       const total = data.reduce(
         (sum, week) =>
-          sum + ((week[item.label as keyof typeof week] as number) || 0),
+          sum + ((week[item.name as keyof typeof week] as number) || 0),
         0
       );
       return {
-        name: item.label,
+        name: item.name,
         value: total,
-        fill: colorMap[item.label] || "#888888",
+        fill: colorMap[item.name] || "#888888",
       };
     });
   }, [data, visibleLegendItems, colorMap]);
@@ -67,10 +67,10 @@ export default function WeeklyMoodTrend() {
               <Tooltip />
               {visibleLegendItems.map((item) => (
                 <Bar
-                  key={item.label}
-                  dataKey={item.label}
+                  key={item.name}
+                  dataKey={item.name}
                   stackId="mood"
-                  fill={colorMap[item.label] || "#888888"}
+                  fill={colorMap[item.name] || "#888888"}
                 />
               ))}
             </BarChart>
@@ -102,11 +102,11 @@ export default function WeeklyMoodTrend() {
               <Tooltip />
               {visibleLegendItems.map((item) => (
                 <Area
-                  key={item.label}
+                  key={item.name}
                   type="monotone"
-                  dataKey={item.label}
+                  dataKey={item.name}
                   stackId="mood"
-                  fill={colorMap[item.label] || "#888888"}
+                  fill={colorMap[item.name] || "#888888"}
                 />
               ))}
             </AreaChart>

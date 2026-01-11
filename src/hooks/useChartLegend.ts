@@ -7,7 +7,7 @@ export function useChartLegend(initialItems: ChartLegendItem[]) {
 
   const colorMap = useMemo(() => {
     return Object.fromEntries(
-      legendItems.map((item) => [item.label, item.color])
+      legendItems.map((item) => [item.name, item.color])
     );
   }, [legendItems]);
 
@@ -16,15 +16,15 @@ export function useChartLegend(initialItems: ChartLegendItem[]) {
     [legendItems]
   );
 
-  const handleColorChange = (label: string, color: string) => {
+  const handleColorChange = (name: string, color: string) => {
     setLegendItems((prev) =>
-      prev.map((item) => (item.label === label ? { ...item, color } : item))
+      prev.map((item) => (item.name === name ? { ...item, color } : item))
     );
   };
 
-  const handleVisibilityChange = (label: string, visible: boolean) => {
+  const handleVisibilityChange = (name: string, visible: boolean) => {
     setLegendItems((prev) =>
-      prev.map((item) => (item.label === label ? { ...item, visible } : item))
+      prev.map((item) => (item.name === name ? { ...item, visible } : item))
     );
   };
 
